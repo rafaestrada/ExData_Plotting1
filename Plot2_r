@@ -1,0 +1,16 @@
+##Download File
+temp <- tempfile()
+download.file("https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip",temp)
+data <- read.table(unz(temp, "household_power_consumption.txt"))
+unlink(temp)  
+
+##Select rows
+sub <- subset(data, Date == "1/2/2007" | Date == "2/2/2007") ## seleccionamos laas observaciones a utilizar
+rm(data) 
+
+##Create graph
+datetime <- strptime(paste(sub$Date, sub$Time, sep=" "), "%d/%m/%Y %H:%M:%S") 
+globalActivePower <- as.numeric(sub$Global_active_power)
+png("plot2.png", width=480, height=480)
+plot(datetime, globalActivePower, type="l", xlab="", ylab="Global Active Power (kilowatts)")
+dev.off()
